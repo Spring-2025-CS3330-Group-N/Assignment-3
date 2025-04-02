@@ -1,6 +1,6 @@
 package edu.missouri.groupn.mlm.event.strategy.pitch;
 
-public class HigherPitchStrategy implements IPitchStrategy {
+public class HigherPitchStrategy implements PitchStrategy {
 	/**
 	 * This modifyPitch method implementation increases the pitch of the note passed in as an argument.
 	 */
