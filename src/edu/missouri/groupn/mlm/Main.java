@@ -1,18 +1,18 @@
 package edu.missouri.groupn.mlm;
 
 import java.util.HashMap;
-import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 
+import edu.missouri.groupn.mlm.noteFactories.StaccatoMidiEventFactory;
+import edu.missouri.groupn.mlm.noteFactories.LegatoMidiEventFactory;
 import edu.missouri.groupn.mlm.noteFactories.StandardMidiEventFactory;
 
 public class Main {
 	public static void main(String[] args) {
-		var noteFactory = new StandardMidiEventFactory();
+		var noteFactory = new LegatoMidiEventFactory();
 
 		try {
 			var events = MidiCsvParser.parseCsv("media/mystery_song.csv");
