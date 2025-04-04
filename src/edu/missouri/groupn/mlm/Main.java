@@ -30,8 +30,8 @@ public class Main {
 					new MidiEvent(
 						new ShortMessage(
 							ShortMessage.PROGRAM_CHANGE | channel,
-							0,
-							channelMap.get(channel)
+							channelMap.get(channel),
+							0
 						),
 						0
 					)
