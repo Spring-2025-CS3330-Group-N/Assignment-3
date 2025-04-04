@@ -12,24 +12,24 @@ import edu.missouri.groupn.mlm.noteFactories.StandardMidiEventFactory;
 
 public class Main {
 	public static void main(String[] args) {
-		var noteFactory = new LegatoMidiEventFactory();
+		var noteFactory = new StandardMidiEventFactory();
 
 		try {
 			var events = MidiCsvParser.parseCsv("media/mystery_song.csv");
-			
+
 			var channelMap = new HashMap<Integer, Integer>();
 			for (var event : events) {
 				channelMap.put(event.getChannel(), event.getInstrument());
 			}
-			
-			var sequence = new Sequence(Sequence.PPQ, 384);
 
+			var sequence = new Sequence(Sequence.PPQ, 384);
 			var track = sequence.createTrack();
+
 			for (var channel : channelMap.keySet()) {
 				track.add(
 					new MidiEvent(
 						new ShortMessage(
-							ShortMessage.PROGRAM_CHANGE,
+							ShortMessage.PROGRAM_CHANGE | channel,
 							0,
 							channelMap.get(channel)
 						),
@@ -46,18 +46,18 @@ public class Main {
 				);
 				track.add(event);
 			}
-			
+
 			var sequencer = MidiSystem.getSequencer();
 			sequencer.open();
 			sequencer.setSequence(sequence);
 			sequencer.start();
-			
+
 			while (sequencer.isRunning()) {
 				Thread.sleep(100);
 			}
-			
+
 			sequencer.close();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

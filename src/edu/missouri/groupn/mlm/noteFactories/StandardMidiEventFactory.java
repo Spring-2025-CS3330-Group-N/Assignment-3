@@ -9,7 +9,7 @@ public class StandardMidiEventFactory implements MidiEventFactory {
 	public MidiEvent createNoteOn(int tick, int note, int velocity, int channel) throws InvalidMidiDataException {
 		var event = new MidiEvent(
 			new ShortMessage(
-				ShortMessage.NOTE_ON,
+				ShortMessage.NOTE_ON | channel,
 				note,
 				velocity
 			),
@@ -22,7 +22,7 @@ public class StandardMidiEventFactory implements MidiEventFactory {
 	public MidiEvent createNoteOff(int tick, int note, int channel) throws InvalidMidiDataException {
 		var event = new MidiEvent(
 			new ShortMessage(
-				ShortMessage.NOTE_OFF,
+				ShortMessage.NOTE_OFF | channel,
 				note,
 				0
 			),
