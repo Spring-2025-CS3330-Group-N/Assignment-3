@@ -30,7 +30,7 @@ public class MidiCsvParser {
 		return event;
 	}
 
-	static List<MidiEventData> parseCsv(String filename) {
+	static List<MidiEventData> parseCsv(String filename) throws FileNotFoundException {
 		var events = new ArrayList<MidiEventData>();
 
 		try (var buffer = new BufferedReader(new FileReader(filename))) {
@@ -40,9 +40,9 @@ public class MidiCsvParser {
 				events.add(event);
 			}
 		} catch (FileNotFoundException e) {
-			// couldn't open
+			throw e;
 		} catch (IOException e) {
-			// couldn't close
+			// since we're only reading it doesn't matter if we can't close the file
 		}
 		
 		return events;
