@@ -7,7 +7,7 @@ public class HigherPitchStrategy implements PitchStrategy {
 	@Override
 	public int modifyPitch(int note) {
 		// increment note value by 2
-		return 0;
+		return note +2;
 	}
 
 }

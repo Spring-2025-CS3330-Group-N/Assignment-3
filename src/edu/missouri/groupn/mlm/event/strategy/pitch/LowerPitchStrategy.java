@@ -8,7 +8,7 @@ public class LowerPitchStrategy implements PitchStrategy {
 	@Override
 	public int modifyPitch(int note) {
 		// decrement note value by 2
-		return 0;
+		return note -2;
 	}
 
 }
