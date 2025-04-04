@@ -8,10 +8,13 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 
+import edu.missouri.groupn.mlm.noteFactories.StandardMidiEventFactory;
+
 public class Main {
 	public static void main(String[] args) {
+		var noteFactory = new StandardMidiEventFactory();
+
 		try {
-			System.out.println("do you hear the music?");
 			var events = MidiCsvParser.parseCsv("media/mystery_song.csv");
 			
 			var channelMap = new HashMap<Integer, Integer>();
@@ -35,17 +38,13 @@ public class Main {
 				);
 			}
 
-			for (var event : events) {
-				track.add(
-					new MidiEvent(
-						new ShortMessage(
-							event.getNoteOnOff(),
-							event.getNote(),
-							event.getVelocity()
-						),
-						event.getStartEndTick()
-					)
+			for (var event_datum : events) {
+				var event = (
+					event_datum.getNoteOnOff() == ShortMessage.NOTE_ON
+					? noteFactory.createNoteOn(event_datum.getStartEndTick(), event_datum.getNote(), event_datum.getVelocity(), event_datum.getChannel())
+					: noteFactory.createNoteOff(event_datum.getStartEndTick(), event_datum.getNote(), event_datum.getChannel())
 				);
+				track.add(event);
 			}
 			
 			var sequencer = MidiSystem.getSequencer();
