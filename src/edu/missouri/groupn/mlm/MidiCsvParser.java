@@ -30,7 +30,7 @@ public class MidiCsvParser {
 		return event;
 	}
 
-	static List<MidiEventData> parseCsv(String filename) throws FileNotFoundException {
+	public static List<MidiEventData> parseCsv(String filename) throws FileNotFoundException {
 		var events = new ArrayList<MidiEventData>();
 
 		try (var buffer = new BufferedReader(new FileReader(filename))) {
