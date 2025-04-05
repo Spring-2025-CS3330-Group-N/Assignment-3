@@ -8,7 +8,7 @@ import javax.sound.midi.Track;
 public class DynamicInstrumentStrategy implements InstrumentStrategy {
 	private int instrument;
 
-	DynamicInstrumentStrategy(int instrument) {
+	public DynamicInstrumentStrategy(int instrument) {
 		this.instrument = instrument;
 	}
 	

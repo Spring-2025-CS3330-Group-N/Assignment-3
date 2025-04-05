@@ -7,7 +7,12 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 
 import edu.missouri.groupn.mlm.noteFactories.StaccatoMidiEventFactory;
+import edu.missouri.groupn.mlm.event.strategy.instrument.DynamicInstrumentStrategy;
+import edu.missouri.groupn.mlm.event.strategy.instrument.InstrumentStrategy;
+import edu.missouri.groupn.mlm.event.strategy.pitch.NaturalPitchStrategy;
+import edu.missouri.groupn.mlm.event.strategy.pitch.PitchStrategy;
 import edu.missouri.groupn.mlm.noteFactories.LegatoMidiEventFactory;
+import edu.missouri.groupn.mlm.noteFactories.MidiEventFactory;
 import edu.missouri.groupn.mlm.noteFactories.StandardMidiEventFactory;
 
 public class Main {
@@ -17,35 +22,24 @@ public class Main {
 		try {
 			var events = MidiCsvParser.parseCsv("media/mystery_song.csv");
 
-			var channelMap = new HashMap<Integer, Integer>();
+			var channelMap = new HashMap<Integer, InstrumentStrategy>();
 			for (var event : events) {
-				channelMap.put(event.getChannel(), event.getInstrument());
+				var instrumentStrategy = new DynamicInstrumentStrategy(event.getInstrument());
+				channelMap.put(event.getChannel(), instrumentStrategy);
 			}
+
+			MidiEventFactory eventFactory = new StandardMidiEventFactory();
+			PitchStrategy pitchStrategy = new NaturalPitchStrategy();
+
+			var trackBuilder = new TrackBuilder(
+				events,
+				eventFactory,
+				pitchStrategy,
+				channelMap
+			);
 
 			var sequence = new Sequence(Sequence.PPQ, 384);
-			var track = sequence.createTrack();
-
-			for (var channel : channelMap.keySet()) {
-				track.add(
-					new MidiEvent(
-						new ShortMessage(
-							ShortMessage.PROGRAM_CHANGE | channel,
-							channelMap.get(channel),
-							0
-						),
-						0
-					)
-				);
-			}
-
-			for (var event_datum : events) {
-				var event = (
-					event_datum.getNoteOnOff() == ShortMessage.NOTE_ON
-					? noteFactory.createNoteOn(event_datum.getStartEndTick(), event_datum.getNote(), event_datum.getVelocity(), event_datum.getChannel())
-					: noteFactory.createNoteOff(event_datum.getStartEndTick(), event_datum.getNote(), event_datum.getChannel())
-				);
-				track.add(event);
-			}
+			trackBuilder.build_track(sequence);
 
 			var sequencer = MidiSystem.getSequencer();
 			sequencer.open();
