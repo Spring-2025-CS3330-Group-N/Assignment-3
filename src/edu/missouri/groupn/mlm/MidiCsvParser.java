@@ -5,15 +5,35 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import javax.sound.midi.ShortMessage;
 
 public class MidiCsvParser {
-	private static MidiEventData parseLine(String line) {
+	private static int parseEventType(String eventName) throws ParseException {
+		if (eventName.equals("Note_on_c")) {
+			return ShortMessage.NOTE_ON;
+		}
+		
+		if (eventName.equals("Note_off_c")) {
+			return ShortMessage.NOTE_OFF;
+		}
+		
+		throw new ParseException("Event type \"" + eventName +  "\" not recognized", 0);
+	}
+
+	private static MidiEventData parseLine(String line) throws ParseException {
 		// TODO: handle bad input!
 		var items = line.split(", ?");
+
+		if (items.length < 6) {
+			throw new ParseException("Line \"" + line + "\" has too few values!", 0);
+		} else if (items.length > 6) {
+			System.err.println("Line \"" + line + "\" has too many values!");
+		}
+
 		var startEndTick = Integer.parseInt(items[0]);
-		var onOff = items[1].equals("Note_on_c")? ShortMessage.NOTE_ON : ShortMessage.NOTE_OFF; // TODO: more possible bad inputs
+		var onOff = MidiCsvParser.parseEventType(items[1]);
 		var channel = Integer.parseInt(items[2]);
 		var note = Integer.parseInt(items[3]);
 		var velocity = Integer.parseInt(items[4]);
@@ -30,7 +50,7 @@ public class MidiCsvParser {
 		return event;
 	}
 
-	public static List<MidiEventData> parseCsv(String filename) throws FileNotFoundException {
+	public static List<MidiEventData> parseCsv(String filename) throws FileNotFoundException, ParseException {
 		var events = new ArrayList<MidiEventData>();
 
 		try (var buffer = new BufferedReader(new FileReader(filename))) {
