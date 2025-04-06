@@ -39,7 +39,12 @@ public class TrackBuilder {
 		}
 		
 		for (var eventDatum : this.eventData) {
-			var note = this.pitchStrategy.modifyPitch(eventDatum.getNote());
+			// Corresponding ON and OFF events have to match
+			var note = (
+				this.pitchStrategy != null
+				? this.pitchStrategy.modifyPitch(eventDatum.getNote())
+				: eventDatum.getNote()
+			);
 
 			var event = (
 				eventDatum.getNoteOnOff() == ShortMessage.NOTE_ON

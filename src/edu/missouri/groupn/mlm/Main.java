@@ -1,24 +1,17 @@
 package edu.missouri.groupn.mlm;
 
 import java.util.HashMap;
-import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
-import javax.sound.midi.ShortMessage;
 
-import edu.missouri.groupn.mlm.noteFactories.StaccatoMidiEventFactory;
 import edu.missouri.groupn.mlm.event.strategy.instrument.DynamicInstrumentStrategy;
 import edu.missouri.groupn.mlm.event.strategy.instrument.InstrumentStrategy;
-import edu.missouri.groupn.mlm.event.strategy.pitch.NaturalPitchStrategy;
 import edu.missouri.groupn.mlm.event.strategy.pitch.PitchStrategy;
-import edu.missouri.groupn.mlm.noteFactories.LegatoMidiEventFactory;
 import edu.missouri.groupn.mlm.noteFactories.MidiEventFactory;
 import edu.missouri.groupn.mlm.noteFactories.StandardMidiEventFactory;
 
 public class Main {
 	public static void main(String[] args) {
-		var noteFactory = new StandardMidiEventFactory();
-
 		try {
 			var events = MidiCsvParser.parseCsv("media/mystery_song.csv");
 
@@ -29,7 +22,7 @@ public class Main {
 			}
 
 			MidiEventFactory eventFactory = new StandardMidiEventFactory();
-			PitchStrategy pitchStrategy = new NaturalPitchStrategy();
+			PitchStrategy pitchStrategy = null;
 
 			var trackBuilder = new TrackBuilder(
 				events,
