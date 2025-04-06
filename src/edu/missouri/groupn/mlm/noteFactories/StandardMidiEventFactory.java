@@ -4,7 +4,13 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.ShortMessage;
 
+/**
+ * A 'factory' for making MIDI events. Doesn't apply any changes.
+ */
 public class StandardMidiEventFactory implements MidiEventFactory {
+	/**
+	 * See the interface for details.
+	 */
 	@Override
 	public MidiEvent createNoteOn(int tick, int note, int velocity, int channel) throws InvalidMidiDataException {
 		var event = new MidiEvent(
@@ -18,6 +24,9 @@ public class StandardMidiEventFactory implements MidiEventFactory {
 		return event;
 	}
 
+	/**
+	 * See the interface for details.
+	 */
 	@Override
 	public MidiEvent createNoteOff(int tick, int note, int channel) throws InvalidMidiDataException {
 		var event = new MidiEvent(

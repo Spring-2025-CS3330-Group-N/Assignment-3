@@ -10,6 +10,12 @@ import java.util.ArrayList;
 import javax.sound.midi.ShortMessage;
 
 public class MidiCsvParser {
+	/**
+	 * Parses an event name
+	 * @param eventName - the name of the event in the CSV
+	 * @return - the MIDI message type
+	 * @throws ParseException - if the event name is not recognized
+	 */
 	private static int parseEventType(String eventName) throws ParseException {
 		if (eventName.equals("Note_on_c")) {
 			return ShortMessage.NOTE_ON;
@@ -22,8 +28,13 @@ public class MidiCsvParser {
 		throw new ParseException("Event type \"" + eventName +  "\" not recognized", 0);
 	}
 
+	/**
+	 * Parses a single line of the CSV file
+	 * @param line
+	 * @return - the event described by that line
+	 * @throws ParseException - if the line has too few values or if an event type is unrecognized
+	 */
 	private static MidiEventData parseLine(String line) throws ParseException {
-		// TODO: handle bad input!
 		var items = line.split(", ?");
 
 		if (items.length < 6) {
@@ -50,6 +61,13 @@ public class MidiCsvParser {
 		return event;
 	}
 
+	/**
+	 * Parses a CSV file containing data in the format specified by the assignment
+	 * @param filename - the path to the file to be parsed
+	 * @return - the events contained in the parsed file
+	 * @throws FileNotFoundException - if the path does not resolve
+	 * @throws ParseException - if the file cannot be parsed
+	 */
 	public static List<MidiEventData> parseCsv(String filename) throws FileNotFoundException, ParseException {
 		var events = new ArrayList<MidiEventData>();
 

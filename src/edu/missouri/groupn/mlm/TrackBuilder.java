@@ -12,12 +12,22 @@ import edu.missouri.groupn.mlm.event.strategy.instrument.InstrumentStrategy;
 import edu.missouri.groupn.mlm.event.strategy.pitch.PitchStrategy;
 import edu.missouri.groupn.mlm.noteFactories.MidiEventFactory;
 
+/**
+ * Class for constructing a list of MIDI events altered by the strategies
+ * described in the assignment.
+ */
 public class TrackBuilder {
 	List<MidiEventData> eventData;
 	MidiEventFactory eventFactory;
 	PitchStrategy pitchStrategy;
 	HashMap<Integer, InstrumentStrategy> instrumentStrategies;
-	
+
+	/**
+	 * @param eventData - a list of MIDI event descriptions
+	 * @param eventFactory - a 'factory' for creating events from their description
+	 * @param pitchStrategy - a 'strategy' for adjusting the pitch of each note
+	 * @param instrumentStrategies - a 'strategy' for setting the MIDI instrument of each channel
+	 */
 	TrackBuilder(
 		List<MidiEventData> eventData,
 		MidiEventFactory eventFactory,
@@ -30,6 +40,13 @@ public class TrackBuilder {
 		this.instrumentStrategies = instrumentStrategies;
 	}
 
+	/**
+	 * Build the track using the strategies described in the constructor
+	 * @param sequence - the sequence to which the track belongs
+	 * @return - the track (note that it is implicitly associated with the sequence)
+	 * @throws InvalidMidiDataException - if a MIDI event contains values not
+	 *   recognized by the MIDI specification
+	 */
 	public Track build_track(Sequence sequence) throws InvalidMidiDataException {
 		var track = sequence.createTrack();
 		

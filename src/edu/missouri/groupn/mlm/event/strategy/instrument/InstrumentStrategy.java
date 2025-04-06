@@ -6,9 +6,9 @@ import javax.sound.midi.Track;
 public interface InstrumentStrategy {
 	/**
 	 * This abstract method will be implemented to select an instrument for a given channel on a track.
-	 * @param track Track to be played
-	 * @param channel Channel from the track chosen for instrument selection
-	 * @throws InvalidMidiDataException
+	 * @param track - the Track to which the channel belongs
+	 * @param channel - the Channel to set the instrument for
+	 * @throws InvalidMidiDataException - if the instrument id is not recognized
 	 */
 	void applyInstrument(Track track, int channel) throws InvalidMidiDataException;
 }
